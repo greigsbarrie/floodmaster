@@ -1,0 +1,22 @@
+--------------------------------------------------------
+--  DDL for Package PKG_FRM_UTIL
+--------------------------------------------------------
+
+  CREATE OR REPLACE PACKAGE "FLOODMASTER"."PKG_FRM_UTIL" IS
+
+FUNCTION TO_NUMERIC
+ (PNUM IN VARCHAR2
+ ,PFMT IN VARCHAR2 := NULL
+ )
+ RETURN NUMBER;
+FUNCTION CREATEDATE
+ (PYEAR IN VARCHAR2
+ ,PMONTH IN VARCHAR2
+ ,PDAY IN VARCHAR2
+ )
+ RETURN VARCHAR2;
+END PKG_FRM_UTIL;
+
+ 
+
+/

@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  Ref Constraints for Table FL10_SCU_LAS
+--------------------------------------------------------
+
+  ALTER TABLE "FLOODMASTER"."FL10_SCU_LAS" ADD CONSTRAINT "FL10_FL03_FK" FOREIGN KEY ("SCU_ID")
+	  REFERENCES "FLOODMASTER"."FL03_FRM_SUB_CATCHMENT_UNITS" ("SCU_ID") ENABLE;
+  ALTER TABLE "FLOODMASTER"."FL10_SCU_LAS" ADD CONSTRAINT "FL10_GE70_FK" FOREIGN KEY ("LA_ID")
+	  REFERENCES "GENERAL"."GE70_LOCAL_AUTHORITIES" ("LA_ID") ENABLE;

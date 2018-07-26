@@ -1,0 +1,22 @@
+--------------------------------------------------------
+--  DDL for View VW_HISTORIC_FLOOD_OUTLINE
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "FLOODMASTER"."VW_HISTORIC_FLOOD_OUTLINE" ("SCHEME_ID", "SCHEME_NAME", "SCHEME_REFERENCE", "HFO_DATE", "HFO_AREA", "COMMENTS", "PRB_ID", "PRODUCED_BY", "HFO_ID", "HFO_REFERENCE") AS 
+  SELECT SF01.SCHEME_ID
+          ,SF01.SCHEME_NAME
+          ,SF01.SCHEME_REFERENCE
+          ,SF35.HFO_DATE
+          ,SF35.HFO_AREA
+          ,SF35.COMMENTS
+          ,SF35.PRB_ID
+          ,SF34.DESCRIPTION PRODUCED_BY
+          ,SF35.HFO_ID
+          ,SF35.HFO_REFERENCE
+            FROM 
+          SF35_HISTORIC_FLOOD_OUTLINE SF35
+          ,SF01_FLOOD_PREVENTION_SCHEME SF01
+          ,SF34_PRODUCED_BY SF34
+            WHERE
+          SF35.SCHEME_ID = SF01.SCHEME_ID
+          AND SF35.PRB_ID = SF34.PRB_ID;

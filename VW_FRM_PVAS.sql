@@ -1,0 +1,42 @@
+--------------------------------------------------------
+--  DDL for View VW_FRM_PVAS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "FLOODMASTER"."VW_FRM_PVAS" ("PVA_ID", "PVA_REFERENCE", "RBD_CODE", "RBD_NAME", "LPD_ID", "LPD_NAME", "EASTING", "NORTHING", "LATITUDE", "LONGITUDE", "DATE_DERIVED", "TOTAL_AREA_KM2", "PVA_NAME", "STATUS_ID", "STATUS", "REASON_ID", "CHANGE_REASON", "OLD_PVA_ID", "START_DATE", "END_DATE") AS 
+  SELECT FL01.PVA_ID,
+          FL01.PVA_REFERENCE,
+          FL02.RBD_CODE,
+          WF39.NAME RBD_NAME,
+          FL01.LPD_ID,
+          FL02.LPD_NAME,
+          EASTING,
+          NORTHING,
+          LAT LATITUDE,
+          LON LONGITUDE,
+          FL01.DATE_DERIVED,
+          (SELECT trim(to_char(SUM (PKG_FRM_UTIL.TO_NUMERIC (ATTRIBUTE_VALUE)),'9999999999999.9999'))
+             FROM FL13_SCU_ATTR_VALUES FL13
+                  JOIN FL05_FRM_SCU_ATTRIBUTES FL05
+                     ON (FL13.ATTRIBUTE_ID = FL05.ATTRIBUTE_ID)
+                  JOIN FL03_FRM_SUB_CATCHMENT_UNITS FL3
+                     ON (FL13.SCU_ID = FL3.SCU_ID)
+            WHERE FL05.ATTRIBUTE_NAME = 'TOTAL_AREA'
+                  AND FL3.PVA_ID = FL01.PVA_ID)
+          TOTAL_AREA_KM2,
+          FL01.PVA_NAME,
+          FL74.STATUS_ID,
+          FL74.STATUS,
+          FL75.REASON_ID,
+          FL75.REASON,
+          FL01.OLD_PVA_ID,
+          FL01.START_DATE,
+          FL01.END_DATE
+     FROM FL01_PVAS FL01
+          JOIN FL02_LOCAL_PLAN_DISTRICTS FL02
+             ON (FL01.LPD_ID = FL02.LPD_ID)
+          JOIN WF39_RIVER_BASIN_DISTRICTS WF39
+             ON (FL02.RBD_CODE = WF39.RBD_CODE)
+          LEFT JOIN FL74_PVA_STATUS FL74
+             ON (FL01.STATUS_ID = FL74.STATUS_ID)
+          LEFT JOIN FL75_PVA_CHANGE_REASONS FL75
+             ON (FL01.REASON_ID = FL75.REASON_ID);

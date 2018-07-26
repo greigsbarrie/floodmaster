@@ -1,0 +1,19 @@
+--------------------------------------------------------
+--  DDL for View VW_DESIGN_CONSULTANT_USED
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "FLOODMASTER"."VW_DESIGN_CONSULTANT_USED" ("SCHEME_ID", "SCHEME_NAME", "SCHEME_REFERENCE", "DCU_ID", "DEC_ID", "DEC_DESCRIPTION", "COMMENTS") AS 
+  SELECT SF01.SCHEME_ID
+          ,SF01.SCHEME_NAME
+          ,SF01.SCHEME_REFERENCE
+          ,SF17.DCU_ID
+          ,SF17.DEC_ID
+          ,SF18.DESCRIPTION DEC_DESCRIPTION
+          ,SF17.COMMENTS
+            FROM 
+          SF17_DESIGN_CONSULTANT_USED SF17
+          ,SF18_DESIGN_CONSULTANT SF18
+          ,SF01_FLOOD_PREVENTION_SCHEME SF01
+            WHERE 
+          SF17.SCHEME_ID = SF01.SCHEME_ID
+          AND SF17.DEC_ID = SF18.DEC_ID;

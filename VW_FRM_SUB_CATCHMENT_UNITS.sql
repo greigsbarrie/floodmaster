@@ -1,0 +1,29 @@
+--------------------------------------------------------
+--  DDL for View VW_FRM_SUB_CATCHMENT_UNITS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE VIEW "FLOODMASTER"."VW_FRM_SUB_CATCHMENT_UNITS" ("SCU_ID", "SCU_REFERENCE", "PVA_ID", "PVA_REFERENCE", "RBD_CODE", "RBD_NAME", "LPD_ID", "LPD_NAME", "DATE_DERIVED", "TOTAL_AREA_KM2") AS 
+  SELECT FL03.SCU_ID,
+          FL03.SCU_REFERENCE,
+          FL03.PVA_ID,
+          FL01.PVA_REFERENCE,
+          FL02.RBD_CODE,
+          WF39.NAME RBD_NAME,
+          FL03.LPD_ID,
+          FL02.LPD_NAME,
+          FL03.DATE_DERIVED,
+          (SELECT TRIM(TO_CHAR (
+                          SUM (PKG_FRM_UTIL.TO_NUMERIC (ATTRIBUTE_VALUE)),
+                          '99999999999999999999.9999'))
+             FROM FL13_SCU_ATTR_VALUES FL13 JOIN FL05_FRM_SCU_ATTRIBUTES FL05
+                     ON (FL13.ATTRIBUTE_ID = FL05.ATTRIBUTE_ID)
+            WHERE FL05.ATTRIBUTE_NAME = 'TOTAL_AREA' AND FL13.SCU_ID = FL03.SCU_ID)
+             TOTAL_AREA_KM2
+     FROM FL03_FRM_SUB_CATCHMENT_UNITS FL03
+          JOIN FL02_LOCAL_PLAN_DISTRICTS FL02
+             ON (FL03.LPD_ID = FL02.LPD_ID)
+          JOIN WF39_RIVER_BASIN_DISTRICTS WF39
+             ON (FL02.RBD_CODE = WF39.RBD_CODE)
+          LEFT JOIN FL01_PVAS FL01
+             ON (FL03.PVA_ID = FL01.PVA_ID)
+ ;
